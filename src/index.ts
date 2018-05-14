@@ -1,13 +1,18 @@
+import { ApolloLink, execute, FetchResult, GraphQLRequest } from 'apollo-link';
 import { CombinedError, IExchange } from 'urql';
 import { Observable } from 'zen-observable-ts';
-
-import { ApolloLink, execute, FetchResult, GraphQLRequest } from 'apollo-link';
 
 export const apolloLinkExchange = (
   link: ApolloLink
 ): IExchange => operation => {
+  const context = operation.context || {};
+
   const apolloOperation: GraphQLRequest = {
-    context: {}, // Reset context
+    context: {
+      ...context,
+      fetchOptions: context.fetchOptions || undefined,
+      uri: context.url || undefined,
+    },
     extensions: {},
     operationName: operation.operationName,
     query: operation.query as any,
