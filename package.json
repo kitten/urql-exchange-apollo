@@ -1,0 +1,102 @@
+{
+  "name": "urql-exchange-apollo",
+  "version": "0.0.1",
+  "description": "An exchange for urql to use Apollo Links",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "jsnext:main": "es/index.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "coverage": "jest --coverage",
+    "clean-lib": "rimraf lib",
+    "build-babel": "babel src --extensions \".ts,.tsx\"",
+    "build-lib": "npm run clean-lib && builder run --env \"{\\\"BABEL_ENV\\\":\\\"commonjs\\\"}\" build-babel -- -d lib",
+    "clean-es": "rimraf es",
+    "build-es": "npm run clean-es && builder run build-babel -- -d es",
+    "watch-es": "watch \"npm run build-es\" src/ -d",
+    "clean-types": "rimraf types",
+    "build-types": "npm run clean-types && tsc -p tsconfig.dts.json",
+    "build": "builder concurrent --buffer build-lib build-es build-types",
+    "type-check": "tsc",
+    "lint": "tslint 'src/**/*.{ts, tsx}'",
+    "test": "jest",
+    "prettier": "prettier --write \"{,!(node_modules|custom-typings|types)/**/}*.{js,jsx,ts,tsx,json,md}\"",
+    "precommit": "lint-staged"
+  },
+  "author": "Phil Pluckthun",
+  "license": "MIT",
+  "resolutions": {
+    "babel-core": "^7.0.0-bridge.0"
+  },
+  "jest": {
+    "setupFiles": [
+      "./src/tests/setup.js"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfigFile": "tsconfig.json",
+        "useBabelrc": true
+      }
+    },
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}"
+    ],
+    "testRegex": "(src/tests/.*(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.38",
+    "@babel/core": "^7.0.0-beta.38",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.38",
+    "@babel/plugin-proposal-pipeline-operator": "^7.0.0-beta.38",
+    "@babel/plugin-syntax-object-rest-spread": "^7.0.0-beta.38",
+    "@babel/plugin-transform-modules-commonjs": "^7.0.0-beta.40",
+    "@babel/polyfill": "^7.0.0-beta.38",
+    "@babel/preset-env": "^7.0.0-beta.38",
+    "@babel/preset-react": "^7.0.0-beta.38",
+    "@babel/preset-stage-3": "^7.0.0-beta.38",
+    "@babel/preset-typescript": "^7.0.0-beta.38",
+    "@types/graphql": "^0.12.1",
+    "apollo-link": "^1.2.2",
+    "babel-jest": "^22.1.0",
+    "babel-loader": "8.0.0-beta.0",
+    "babel-plugin-module-resolver": "^3.0.0",
+    "builder": "^3.2.3",
+    "coveralls": "^3.0.0",
+    "graphql": "^0.13.2",
+    "husky": "^0.14.3",
+    "isomorphic-fetch": "^2.2.1",
+    "jest": "^22.1.4",
+    "lint-staged": "^6.0.1",
+    "prettier": "1.10.2",
+    "regenerator-runtime": "^0.11.1",
+    "rimraf": "^2.6.2",
+    "ts-jest": "^22.0.1",
+    "tslint": "^5.9.1",
+    "tslint-config-prettier": "^1.6.0",
+    "tslint-react": "^3.4.0",
+    "typescript": "~2.7.2",
+    "urql": "^0.3.0-next1"
+  },
+  "peerDependencies": {
+    "urql": "^0.3.0-next1",
+    "apollo-link": "^1.2.2"
+  },
+  "sideEffects": false
+}
