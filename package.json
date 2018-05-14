@@ -1,7 +1,7 @@
 {
   "name": "urql-exchange-apollo",
   "version": "0.0.1",
-  "description": "An exchange for urql to use Apollo Links",
+  "description": "An exchange for urql to bridge it to Apollo Links",
   "main": "lib/index.js",
   "module": "es/index.js",
   "jsnext:main": "es/index.js",

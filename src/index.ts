@@ -1,6 +1,13 @@
 import { ApolloLink, execute, FetchResult, GraphQLRequest } from 'apollo-link';
-import { CombinedError, IExchange } from 'urql';
 import { Observable } from 'zen-observable-ts';
+
+import {
+  cacheExchange,
+  CombinedError,
+  dedupExchange,
+  IClient,
+  IExchange,
+} from 'urql';
 
 export const apolloLinkExchange = (
   link: ApolloLink
@@ -61,3 +68,10 @@ export const apolloLinkExchange = (
     return () => sub.unsubscribe();
   });
 };
+
+const defaultApolloExchange = (link: ApolloLink) => (
+  _: IExchange,
+  client: IClient
+) => cacheExchange(client.cache, dedupExchange(apolloLinkExchange(link)));
+
+export default defaultApolloExchange;
