@@ -18,7 +18,9 @@ export const apolloLinkExchange = (
     context: {
       ...context,
       fetchOptions: context.fetchOptions || undefined,
+      skipCache: undefined,
       uri: context.url || undefined,
+      url: undefined,
     },
     extensions: {},
     operationName: operation.operationName,
