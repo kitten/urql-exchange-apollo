@@ -1,4 +1,5 @@
 import { ApolloLink, execute, FetchResult, GraphQLRequest } from 'apollo-link';
+import { parse } from 'graphql/language/parser';
 import { Observable } from 'zen-observable-ts';
 
 import {
@@ -23,8 +24,7 @@ export const apolloLinkExchange = (
       url: undefined,
     },
     extensions: {},
-    operationName: operation.operationName,
-    query: operation.query as any,
+    query: parse(operation.query) as any,
     variables: operation.variables,
   };
 
