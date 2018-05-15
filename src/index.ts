@@ -1,4 +1,5 @@
 import { ApolloLink, execute, FetchResult, GraphQLRequest } from 'apollo-link';
+import { DocumentNode } from 'graphql';
 import { parse } from 'graphql/language/parser';
 import { Observable } from 'zen-observable-ts';
 
@@ -10,10 +11,24 @@ import {
   IExchange,
 } from 'urql';
 
+const getOperationName = (doc: DocumentNode): string | null => {
+  const size = doc.definitions.length;
+
+  for (let i = 0; i < size; i++) {
+    const definition = doc.definitions[i];
+    if (definition.kind === 'OperationDefinition' && definition.name) {
+      return definition.name.value;
+    }
+  }
+
+  return null;
+};
+
 export const apolloLinkExchange = (
   link: ApolloLink
 ): IExchange => operation => {
   const context = operation.context || {};
+  const query: DocumentNode = parse(operation.query);
 
   const apolloOperation: GraphQLRequest = {
     context: {
@@ -24,7 +39,8 @@ export const apolloLinkExchange = (
       url: undefined,
     },
     extensions: {},
-    query: parse(operation.query) as any,
+    operationName: getOperationName(query),
+    query: query as any,
     variables: operation.variables,
   };
 
